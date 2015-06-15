@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GraphVizWrapper;
+using GraphVizWrapper.Queries;
+using GraphVizWrapper.Commands;
 
 namespace FormalMethods
 {
@@ -164,5 +167,20 @@ public partial class Form1 : Form
 		this.ResumeLayout(false);
 
 	}
+
+    public void Graphiz()
+    {
+        var getStartProcessQuery = new GetStartProcessQuery();
+        var getProcessStartInfoQuery = new GetProcessStartInfoQuery();
+        var registerLayoutPluginCommand = new RegisterLayoutPluginCommand(getProcessStartInfoQuery, getStartProcessQuery);
+
+        // GraphGeneration can be injected via the IGraphGeneration interface
+
+        var wrapper = new GraphGeneration(getStartProcessQuery,
+                                          getProcessStartInfoQuery,
+                                          registerLayoutPluginCommand);
+
+        byte[] output = wrapper.GenerateGraph("digraph{a -> b [ label = a];b->a; b -> c; c -> a; a[shape=circle,peripheries=2]; x->a; x[shape=none];}", Enums.GraphReturnType.Png);
+    }
 }
 }
