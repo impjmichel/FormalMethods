@@ -1,41 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Models
 {
-    class NDFA
-    {
-        string input;
-        ArrayList nodes;
 
-        public void setInput(string newInput)
-        {
-            input = newInput;
-        }
+class NDFA
+{
+	private string input;
+	private List<Node<List<String>>> mNodes = new List<Node<List<String>>>();
 
-        public string getInput()
-        {
-            return input;
-        }
+	public List<Node<List<String>>> nodes
+	{
+		get { return mNodes; }
+		set { mNodes = value; }
+	}
 
-        public void setNodes(ArrayList newNodes)
-        {
-            nodes = newNodes;
-        }
+	public void setInput(string newInput)
+	{
+		input = newInput;
+	}
 
-        public void addNode(Node node)
-        {
-            nodes.Add(node);
-        }
+	public string getInput()
+	{
+		return input;
+	}
 
-        public ArrayList getNodes()
-        {
-            return nodes;
-        }
-
-        public NDFA reverse(DFA dfa)
-        {
-            NDFA ndfa = new NDFA();
-            return ndfa;
-        }
-    }
+	public void addNode(Node<List<String>> node)
+	{
+		mNodes.Add(node);
+	}
+}
 }

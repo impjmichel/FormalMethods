@@ -50,6 +50,7 @@
     <Compile Include="Source\Model\NDFA.cs" />
     <Compile Include="Source\Model\Node.cs" />
     <Compile Include="Source\Model\RegExp.cs" />
+    <Compile Include="Source\Model\Util.cs" />
     <Compile Include="Source\View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
