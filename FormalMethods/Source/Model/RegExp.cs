@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections;
+
 namespace Models
 {
     class RegExp
@@ -6,8 +7,7 @@ namespace Models
         Operator op;
         public enum Operator { PLUS, STAR, OR, DOT, ONE };
 
-        static Comparator<String> compareByLength 
-        = new Comparator<String> ()
+        static IComparer<String> compareByLength = new Comparator<String> ()
             {
                 public int compare(string s1, string s2)
                 {
