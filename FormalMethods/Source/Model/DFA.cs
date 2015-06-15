@@ -1,45 +1,33 @@
-using System.Collections;
+using System;
+using System.Collections.Generic;
+
 namespace Models
 {
-    class DFA
-    {
-        string input;
-        ArrayList nodes;
 
-        public void setInput(string newInput)
-        {
-            input = newInput;
-        }
+class DFA
+{
+	private string input;
+	private List<Node<String>> mNodes = new List<Node<String>>();
 
-        public string getInput()
-        {
-            return input;
-        }
+	public List<Node<String>> nodes
+	{
+		get { return mNodes; }
+		set { mNodes = value; }
+	}
 
-        public void setNodes(ArrayList newNodes)
-        {
-            nodes = newNodes;
-        }
+	public void setInput(string newInput)
+	{
+		input = newInput;
+	}
 
-        public void addNode(Node node)
-        {
-            nodes.Add(node);
-        }
+	public string getInput()
+	{
+		return input;
+	}
 
-        public ArrayList getNodes()
-        {
-            return nodes;
-        }
-
-        public DFA minimalize(DFA dfa)
-        {
-            return dfa;
-        }
-
-        public NDFA reverse(DFA dfa)
-        {
-            NDFA ndfa = new NDFA();
-            return ndfa;
-        }
-    }
+	public void addNode(Node<String> node)
+	{
+		mNodes.Add(node);
+	}
+}
 }
