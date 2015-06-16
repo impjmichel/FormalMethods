@@ -7,9 +7,9 @@ namespace Models
 class DFA
 {
 	private string input;
-	private List<Node<String>> mNodes = new List<Node<String>>();
+	private List<Node> mNodes = new List<Node>();
 
-	public List<Node<String>> nodes
+	public List<Node> nodes
 	{
 		get { return mNodes; }
 		set { mNodes = value; }
@@ -25,7 +25,7 @@ class DFA
 		return input;
 	}
 
-	public void addNode(Node<String> node)
+	public void addNode(Node node)
 	{
 		mNodes.Add(node);
 	}

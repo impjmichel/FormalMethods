@@ -53,10 +53,17 @@
     <Compile Include="Source\Model\DFA.cs" />
     <Compile Include="Source\Model\NDFA.cs" />
     <Compile Include="Source\Model\Node.cs" />
+    <Compile Include="Source\Model\RegBase.cs" />
     <Compile Include="Source\Model\RegExp.cs" />
-    <Compile Include="Source\Model\Util.cs" />
+    <Compile Include="Source\Model\RegGram.cs" />
     <Compile Include="Source\View\Form1.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\View\popup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\View\popup.Designer.cs">
+      <DependentUpon>popup.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -69,6 +76,9 @@
     </Compile>
     <EmbeddedResource Include="Source\View\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\View\popup.resx">
+      <DependentUpon>popup.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

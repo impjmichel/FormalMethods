@@ -1,39 +1,36 @@
 ﻿using System.Collections.Generic;
-
+using System;
 
 namespace Models
 {
-/// <summary>
-/// Node : where T should be a String, or a List of Strings, or soft drinks.
-/// </summary>
-class Node<T>
+class Node : IComparable<Node>
 {
-	private string mName;
+	private List<string> mOperators = new List<string>();
 
-	private Dictionary<char, T> mNextNodes = new Dictionary<char, T>();
-	private Dictionary<char, T> mPreviousNodes = new Dictionary<char, T>();
+	private Dictionary<char, SortedSet<string>> mDFAoperators = new Dictionary<char, SortedSet<string>>();
 
-	
-	public bool endNode;
-	public bool startNode;
-	public string name
-	{
-		get { return mName; }
-	}
-	public Dictionary<char, T> nextNodes
-	{
-		get { return mNextNodes; }
-		set { mNextNodes = value; }
-	}
-	public Dictionary<char, T> previousNodes
-	{
-		get { return mPreviousNodes; }
-		set { mPreviousNodes = value; }
-	}
+	public string name;
 
+	public Node()
+	{ }
 	public Node(string name)
 	{
-		mName = name;
+		this.name = name;
+	}
+
+	public List<string> operators
+	{
+		get { return mOperators; }
+	}
+
+	public Dictionary<char, SortedSet<string>> DFAoperators
+	{
+		get { return mDFAoperators; }
+	}
+
+	public int CompareTo(Node other)
+	{
+		return name.CompareTo(other.name);
 	}
 }
 }

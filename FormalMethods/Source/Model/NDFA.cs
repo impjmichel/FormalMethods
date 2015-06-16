@@ -7,9 +7,9 @@ namespace Models
 class NDFA
 {
 	private string input;
-	private List<Node<List<String>>> mNodes = new List<Node<List<String>>>();
+	private List<Node> mNodes = new List<Node>();
 
-	public List<Node<List<String>>> nodes
+	public List<Node> nodes
 	{
 		get { return mNodes; }
 		set { mNodes = value; }
@@ -25,7 +25,7 @@ class NDFA
 		return input;
 	}
 
-	public void addNode(Node<List<String>> node)
+	public void addNode(Node node)
 	{
 		mNodes.Add(node);
 	}
