@@ -22,7 +22,7 @@ class RegGram : RegBase
 		string[] lines = input.Split(new Char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
 		// begin
-		result += cInitRegGrammar + cStartingPoint + lines[0].Trim()[0] + stop;
+		result += cBeginRegGrammar + cStartingPoint + lines[0].Trim()[0] + stop;
 
 		// every line
 		foreach (string line in lines)
@@ -183,7 +183,7 @@ class RegGram : RegBase
 
 	private string toDFAString(Node start, List<Node> nodes, List<Node> end)
 	{
-		string result = cInitRegGrammar + cStartingPoint + start.name + stop;
+		string result = cBeginRegGrammar + cStartingPoint + start.name + stop;
 		foreach (Node node in nodes)
 		{
 			result += node.name + cTo + node.DFAoperators['a'].ToList<string>()[0] + stop;

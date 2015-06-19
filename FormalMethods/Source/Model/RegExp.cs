@@ -47,7 +47,7 @@ class RegExp : RegBase
 		bool ending = false;
 		if (mCurrentNodeNumber == 0)
 		{
-			result += cInitRegGrammar + cStartingPoint + mCurrentNodeNumber + stop;
+			result += cBeginRegGrammar + cStartingPoint + mCurrentNodeNumber + stop;
 			ending = true; 
 		}
 		for (int i = 0; i < input.Length; ++i)

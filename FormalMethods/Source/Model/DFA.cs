@@ -4,30 +4,74 @@ using System.Collections.Generic;
 namespace Models
 {
 
-class DFA
+class DFA : Automat
 {
-	private string input;
-	private List<Node> mNodes = new List<Node>();
-
-	public List<Node> nodes
+	public DFA(Alphabet alphabet)
 	{
-		get { return mNodes; }
-		set { mNodes = value; }
+		mAlphabet = alphabet;
 	}
 
-	public void setInput(string newInput)
+	public bool isDFA()
 	{
-		input = newInput;
+		int alphabetCount = mAlphabet.characters.Count;
+		// check if there's only 1 start point
+		if (mStartNodes.Count == 1)
+		{
+			// check if there are any epsylon transitions
+			foreach(Transition trans in mTransitions)
+			{
+				if (trans.label == Alphabet.Epsylon)
+					return false;
+			}
+			// check if every node has the right number of transitions
+			foreach(string node in mNodes)
+			{
+				List<Transition> fromTransitions = mTransitions.FindAll(x => x.from == node);
+				if (fromTransitions.Count != alphabetCount)
+					return false;
+			}
+			// if it got this far this object is a DFA
+			return true;
+		}
+		return false;
 	}
 
-	public string getInput()
+	/// <summary>
+	/// Why? because we can.
+	/// </summary>
+	public NDFA toNDFA()
 	{
-		return input;
+		NDFA result = new NDFA(mAlphabet);
+		result.endNodes.UnionWith(mEndNodes);
+		result.startNodes.UnionWith(mStartNodes);
+		result.transitions.AddRange(mTransitions);
+		return result;
 	}
 
-	public void addNode(Node node)
+	public NDFA reverse()
 	{
-		mNodes.Add(node);
+		NDFA result = new NDFA(mAlphabet);
+		result.startNodes.UnionWith(mEndNodes);
+		result.endNodes.UnionWith(mStartNodes);
+		foreach (Transition trans in mTransitions)
+		{
+			Transition newTrans = new Transition(trans.label, trans.to, trans.from);
+			result.transitions.Add(newTrans);
+		}
+		return result;
+	}
+
+	public static NDFA reverse(DFA oldDFA)
+	{
+		NDFA result = new NDFA(oldDFA.alphabet);
+		result.startNodes.UnionWith(oldDFA.endNodes);
+		result.endNodes.UnionWith(oldDFA.startNodes);
+		foreach (Transition trans in oldDFA.transitions)
+		{
+			Transition newTrans = new Transition(trans.label, trans.to, trans.from);
+			result.transitions.Add(newTrans);
+		}
+		return result;
 	}
 }
 }
