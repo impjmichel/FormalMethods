@@ -10,10 +10,11 @@ class Automat : RegBase
 {
 	protected string input;
 	protected List<Transition> mTransitions = new List<Transition>();
-	protected HashSet<string> mNodes = new HashSet<string>();
-	protected HashSet<string> mStartNodes = new HashSet<string>();
-	protected HashSet<string> mEndNodes = new HashSet<string>();
+	protected SortedSet<string> mStartNodes = new SortedSet<string>();
+	protected SortedSet<string> mEndNodes = new SortedSet<string>();
 	protected Alphabet mAlphabet;
+
+	public const string cFailState = "failState";
 
 	public Alphabet alphabet
 	{
@@ -23,28 +24,28 @@ class Automat : RegBase
 	{
 		get { return mTransitions; }
 	}
-	public HashSet<string> nodes
+	public SortedSet<string> nodes
 	{
 		get { return fillNodes(); }
 	}
-	public HashSet<string> startNodes
+	public SortedSet<string> startNodes
 	{
 		get { return mStartNodes; }
 	}
-	public HashSet<string> endNodes
+	public SortedSet<string> endNodes
 	{
 		get { return mEndNodes; }
 	}
 
-	private HashSet<string> fillNodes()
+	private SortedSet<string> fillNodes()
 	{
-		mNodes.Clear();
+		SortedSet<string> set = new SortedSet<string>();
 		foreach (Transition trans in mTransitions)
 		{
-			mNodes.Add(trans.from);
-			mNodes.Add(trans.to);
+			set.Add(trans.from);
+			set.Add(trans.to);
 		}
-		return mNodes;
+		return set;
 	}
 
 	public string toGraphVizString()

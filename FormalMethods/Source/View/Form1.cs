@@ -320,10 +320,10 @@ public partial class Form1 : Form
         {
             Alphabet alpha = new Alphabet(alphabetInput);
             RegGram reg = new RegGram(alpha);
-            string test = reg.CreateGraphizString(textBox2.Text);
-            popup pu = new popup();
-            pu.Graphiz(test);
-            pu.Show();
+            //string test = reg.CreateGraphizString(textBox2.Text);
+            //popup pu = new popup();
+            //pu.Graphiz(test);
+            //pu.Show();
         }
         else
         {
