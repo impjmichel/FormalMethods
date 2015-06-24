@@ -28,12 +28,7 @@ public partial class Form1 : Form
     private Label label3;
     private TextBox textBox4;
     private Label label4;
-    private ComboBox comboBox1;
-    private Label label6;
-    private TextBox textBox5;
-    private Label label5;
     private Button button3;
-    private DataGridView dataGridView1;
 	private TabPage tabPage2;
 	
 	public Form1()
@@ -58,16 +53,10 @@ public partial class Form1 : Form
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -198,77 +187,24 @@ public partial class Form1 : Form
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.dataGridView1);
             this.tabPage3.Controls.Add(this.button3);
-            this.tabPage3.Controls.Add(this.comboBox1);
-            this.tabPage3.Controls.Add(this.label6);
-            this.tabPage3.Controls.Add(this.textBox5);
-            this.tabPage3.Controls.Add(this.label5);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(862, 335);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "NDFA input";
+            this.tabPage3.Text = "file input";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(505, 76);
+            this.button3.Location = new System.Drawing.Point(20, 21);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(200, 60);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Create Output";
+            this.button3.Size = new System.Drawing.Size(136, 53);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "Open file";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            1,
-            2,
-            3});
-            this.comboBox1.Location = new System.Drawing.Point(392, 19);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 10;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(389, 3);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(87, 13);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "Number of states";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(9, 19);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(360, 20);
-            this.textBox5.TabIndex = 8;
-            this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 3);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Alphabet";
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(9, 45);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(360, 290);
-            this.dataGridView1.TabIndex = 12;
             // 
             // Form1
             // 
@@ -281,22 +217,25 @@ public partial class Form1 : Form
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
 	}
 
 	private void button1_Click(object sender, EventArgs e)
 	{
-        string alphabetInput = textBox3.Text;
+        regExp(textBox3.Text);        
+	}
+
+    private void regExp(string boxInput)
+    {
+        string alphabetInput = boxInput;
         if (checkAlphabet(alphabetInput))
         {
             Alphabet alpha = new Alphabet(alphabetInput);
             string input = textBox1.Text;
             if (checkString(input))
             {
-                RegExp reg = new RegExp(input,alpha);
+                RegExp reg = new RegExp(input, alpha);
                 string test = reg.CreateGraphizString(input);
                 popup pu = new popup();
                 pu.Graphiz(test);
@@ -311,11 +250,16 @@ public partial class Form1 : Form
         {
             MessageBox.Show("Alphabet not accepted, please try again");
         }
-	}
+    }
 
     private void button2_Click(object sender, EventArgs e)
     {
-        string alphabetInput = textBox3.Text;
+        regGram(textBox4.Text);
+    }
+
+    public void regGram(string BoxInput)
+    {
+        string alphabetInput = BoxInput;
         if (checkAlphabet(alphabetInput))
         {
             Alphabet alpha = new Alphabet(alphabetInput);
@@ -324,7 +268,7 @@ public partial class Form1 : Form
             //popup pu = new popup();
             //pu.Graphiz(test);
             //pu.Show();
-        }
+         }
         else
         {
             MessageBox.Show("Alphabet not accepted, please try again");
@@ -380,54 +324,36 @@ public partial class Form1 : Form
         }
     }
 
-    private void createTable(SortedSet<char> columns, int rows)
+    public void kindOfInput(string line)
     {
-        this.dataGridView1.ColumnCount = columns.Count;
-        for(int i = 0; i < columns.Count; i++)
+        string newInput = "";
+        string[] lines = line.Split(new string[] {"\r\n", "\n"},StringSplitOptions.None);
+
+        lines = lines.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        if (lines.Length > 1)
         {
-            this.dataGridView1.Columns[i].Name = columns.ElementAt(i).ToString();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                newInput += lines[i] + Environment.NewLine;
+            }
+            regGram(newInput);
+        }
+        else if(lines.Length == 1)
+        {
+            regExp(line);
         }
     }
+    
 
     private void button3_Click(object sender, EventArgs e)
     {
-        string alphabetInput = textBox3.Text;
-        if (checkAlphabet(alphabetInput))
-        {
-
-        }
-        else
-        {
-            MessageBox.Show("Alphabet not accepted, please try again");
-        }
+        FileReader fr = new FileReader();
+        string input = fr.getFileContent();
+        kindOfInput(input);
     }
 
-    private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        string alphabetInput = textBox5.Text;
-        if (checkAlphabet(alphabetInput))
-        {
-            Alphabet alpha = new Alphabet(alphabetInput);
-            SortedSet<char> columns = alpha.characters;
-
-            int rows = 3;//(int)this.comboBox1.SelectedValue;
-
-            
-            createTable(columns, rows);
-            this.Refresh();
-        }
-        else
-        {
-            MessageBox.Show("Alphabet not accepted, please try again");
-        }
-        
-    }
-
-    private void textBox5_TextChanged(object sender, EventArgs e)
-    {
-        if (checkAlphabet(textBox5.Text)) this.comboBox1.Show();
-        else this.comboBox1.Hide();
-    }
+    
 
     
 	
