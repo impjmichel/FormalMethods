@@ -19,5 +19,6 @@ class RegBase
 	protected const string stop = ";";
 	protected const string cLabelStart = "[label = ";
 	protected const string cLabelEnd = "]";
+	protected const string cEndStateLabel = "endState";
 }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
@@ -14,7 +11,7 @@ class Automat : RegBase
 	protected SortedSet<string> mEndNodes = new SortedSet<string>();
 	protected Alphabet mAlphabet;
 
-	public const string cFailState = "failState";
+	public const string cFailState = "Ø";
 
 	public Alphabet alphabet
 	{

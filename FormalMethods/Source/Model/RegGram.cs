@@ -22,19 +22,13 @@ class RegGram : RegBase
 		mInput = input;
 	}
 
-	/// <summary>
-	/// direct GraphViz use, without going to NDFA (it does create NDFA picture)
-	/// </summary>
-	public string CreateGraphizString()
+	public NDFA toNDFA()
 	{
 		if (mInput == null)
 			return null;
-		string result = "";
-		string endNode = "end";
-		string[] lines = mInput.Split(new Char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+		NDFA ndfa = new NDFA(mAlphabet);
 
-		// begin
-		result += cBeginRegGrammar + cStartingPoint + lines[0].Trim()[0] + stop;
+		string[] lines = mInput.Split(new Char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
 		// every line
 		foreach (string line in lines)
@@ -45,47 +39,35 @@ class RegGram : RegBase
 			{
 				newLine += str;
 			}
-			// start node
-			string startNodeName = newLine.Substring(0, 1);
-			// to sign
-			int toIndex = newLine.IndexOf('>');
-			// while | nodes
-			string[] rest = newLine.Substring(toIndex + 1).Split('|');
+			
+			// split in from and to parts
+			parts = newLine.Split(new Char[] { '-', '>' }, StringSplitOptions.RemoveEmptyEntries);
+			Util.Assert(parts.Length == 2, "somehow the input had more than 1 arrow");
+			string from = parts[0];
 
-			foreach(string nextNode in rest)
+			if (ndfa.startNodes.Count == 0)
+				ndfa.startNodes.Add(from);
+
+			string toString = parts[1];
+			string[] toParts = toString.Split(new Char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+			foreach (string to in toParts)
 			{
-				if(nextNode.Length == 1)
+				if (mAlphabet.characters.Contains(to[0]))
 				{
-					// eindtoestand
-					if (nextNode[0] == 'a' || nextNode[0] == 'b')
+					char transitionLabel = to[0];
+					string toState = cEndStateLabel;
+					if (to.Length > 1)
+						toState = to.Substring(1);
+					else
 					{
-						result += startNodeName + cTo + endNode;
+						ndfa.endNodes.Add(cEndStateLabel);
 					}
+					Transition transition = new Transition(transitionLabel, from, toState);
+					ndfa.transitions.Add(transition);
 				}
-				else
-				{
-					result += startNodeName + cTo + nextNode[1];
-				}
-				if (nextNode[0] == 'a')
-				{
-					result += cA;
-				}
-				else if (nextNode[0] == 'b')
-				{
-					result += cB;
-				}
-				result += stop;
 			}
 		}
-		//end
-		result += endNode + cEndingCircle+ cEndRegGrammar;
-		return result;
-	}
-
-	public NDFA toNDFA()
-	{
-		//TODO
-		throw new NotImplementedException();
+		return ndfa;
 	}
 }
 }

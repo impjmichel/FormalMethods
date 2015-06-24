@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Models
 {
@@ -10,53 +11,41 @@ class RegExp : RegBase
 	private bool orEnd = false;
 	private bool bracketOpen = false;
 
-	private string exp;
-    private Alphabet alphabet;
+	private string mRegEx;
+	private Alphabet mAlphabet;
 
-	public RegExp()
+	public RegExp(string regEx, Alphabet alpha)
 	{
+		mAlphabet = alpha;
+		mRegEx = regEx;
 	}
 
-	public RegExp(string input, Alphabet alpha)
+	public NDFA toNDFA()
 	{
-        alphabet = alpha;
-		exp = input;
+		if (String.IsNullOrWhiteSpace(mRegEx))
+			return null;
+		NDFA ndfa = new NDFA(mAlphabet);
+		ndfa.transitions.AddRange(regexToTransitions());
+		ndfa.startNodes.Add("0"); // we start always at 0
+		ndfa.endNodes.Add("" + mCurrentNodeNumber); // shouldn't be reset yet...
+		return ndfa;
 	}
 
-	public string getExp()
+	private List<Transition> regexToTransitions()
 	{
-		return exp;
+		mCurrentNodeNumber = 0;
+		return regexToTransitions(mRegEx);
 	}
 
-	public void setExp(string input)
+	private List<Transition> regexToTransitions(string regEx, int previousNodeNumber = 0)
 	{
-		exp = input;
-	}
+		List<Transition> result = new List<Transition>();
 
-	public void toNDFA()
-	{
-		int length = exp.Length;
-
-
-		for(int i = 0; i < length; i++)
+		for (int i = 0; i < mRegEx.Length; ++i)
 		{
-			Console.WriteLine(exp[i]);
-		}
-	}
-
-	public string CreateGraphizString(string input, int previousNodeNumber = 0)
-	{
-		string result = "";
-		bool ending = false;
-		if (mCurrentNodeNumber == 0)
-		{
-			result += cBeginRegGrammar + cStartingPoint + mCurrentNodeNumber + stop;
-			ending = true; 
-		}
-		for (int i = 0; i < input.Length; ++i)
-		{
-			char ch = input[i];
-			switch (ch)		//special RegEx characters:  ( ) + * |
+			Transition tempTransition;
+			char ch = mRegEx[i];
+			switch (ch) // special RegEx characters: ( ) + * |
 			{
 				case '(':
 					if (orStarted)
@@ -64,48 +53,58 @@ class RegExp : RegBase
 						bracketOpen = true;
 					}
 					// open bracket
-					result += mCurrentNodeNumber + cTo;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
 					previousNodeNumber = mCurrentNodeNumber;
 					mCurrentNodeNumber++;
-					result += mCurrentNodeNumber + cEp + stop;
-					string sub = input.Substring(i+1);
+					tempTransition.to = "" + mCurrentNodeNumber;
+					result.Add(tempTransition);
+					string sub = regEx.Substring(i+1);
 					int endOfBracket;
-					result += HandleOpenBracket(sub, previousNodeNumber, out endOfBracket);
+					result.AddRange(HandleOpenBracket(sub, previousNodeNumber, out endOfBracket));
 					i += endOfBracket;
 					break;
 				case ')':
 					bracketOpen = false;
-					result += mCurrentNodeNumber + cTo;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
 					mCurrentNodeNumber++;
-					result += mCurrentNodeNumber + cEp + stop;
+					tempTransition.to = "" + mCurrentNodeNumber;
+					result.Add(tempTransition);
 					if (orEnd)
 					{
-						result += mOrEnd + cTo + mCurrentNodeNumber + cEp + stop;
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);
+						result.Add(tempTransition);
 						orEnd = false;
 						orStarted = false;
 					}
 					break;
 				case '+':
-					result += mCurrentNodeNumber + cTo + previousNodeNumber + cEp + stop;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + previousNodeNumber);
+					result.Add(tempTransition);
 					if (orEnd && !bracketOpen)
 					{
-						result += mCurrentNodeNumber + cTo;
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
 						mCurrentNodeNumber++;
-						result += mCurrentNodeNumber + cEp + stop;
-						result += mOrEnd + cTo + mCurrentNodeNumber + cEp + stop;
+						tempTransition.to = "" + mCurrentNodeNumber;
+						result.Add(tempTransition);
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);
+						result.Add(tempTransition);
 						orEnd = false;
 						orStarted = false;
 					}
 					break;
 				case '*':
-					result += mCurrentNodeNumber + cTo + previousNodeNumber + cEp + stop;
-					result += previousNodeNumber + cTo + mCurrentNodeNumber + cEp + stop;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + previousNodeNumber);
+					result.Add(tempTransition);
+					tempTransition = new Transition(Alphabet.Epsylon, "" + previousNodeNumber, "" + mCurrentNodeNumber);
+					result.Add(tempTransition);
 					if (orEnd && !bracketOpen)
 					{
-						result += mCurrentNodeNumber + cTo;
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
 						mCurrentNodeNumber++;
-						result += mCurrentNodeNumber + cEp + stop;
-						result += mOrEnd + cTo + mCurrentNodeNumber + cEp + stop;
+						tempTransition.to = "" + mCurrentNodeNumber;
+						result.Add(tempTransition);
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);
+						result.Add(tempTransition);
 						orEnd = false;
 						orStarted = false;
 					}
@@ -113,54 +112,41 @@ class RegExp : RegBase
 				case '|':
 					orStarted = true;
 					mOrEnd = mCurrentNodeNumber + 1;
-					result += mCurrentNodeNumber + cTo + mOrEnd + cEp + stop;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + mOrEnd);
+					result.Add(tempTransition);
 					mCurrentNodeNumber = mOrEnd + 1;
 					break;
 				default:
-					previousNodeNumber = mCurrentNodeNumber;
-					mCurrentNodeNumber++;
-					result += previousNodeNumber + cTo + mCurrentNodeNumber;
-					if (ch == 'a')
+					if (mAlphabet.characters.Contains(ch))
 					{
-						result += cA;
+						previousNodeNumber = mCurrentNodeNumber;
+						mCurrentNodeNumber++;
+						tempTransition = new Transition(ch, "" + previousNodeNumber, "" + mCurrentNodeNumber);
+						result.Add(tempTransition);
 					}
-					else if (ch == 'b')
-					{
-						result += cB;
-					}
-					result += stop;
 					break;
 			}
 			if (orStarted && !orEnd)
 			{
-				result += previousNodeNumber + cTo + mCurrentNodeNumber + cEp + stop;
+				tempTransition = new Transition(Alphabet.Epsylon, "" + previousNodeNumber, "" + mCurrentNodeNumber);
+				result.Add(tempTransition);
 				orEnd = true;
 			}
-		}
-
-		if (ending)
-		{
-			result += mCurrentNodeNumber + cEndingCircle;
-			result += cEndRegGrammar;
-			mCurrentNodeNumber = 0;
-			mOrEnd = 0;
 		}
 		return result;
 	}
 
-	private string HandleOpenBracket(string input, int previousNodeNumber, out int length)
+	private List<Transition> HandleOpenBracket(string regEx, int previousNodeNumber, out int length)
 	{
-		string result = "";
 		length = 0;
-		for (int i = input.Length -1; i > 0; --i )
+		for (int i = regEx.Length -1; i > 0; --i )
 		{
-			if (input[i] == ')')
+			if (regEx[i] == ')')
 			{
 				length = i + 1;
 			}
 		}
-		result += CreateGraphizString(input.Substring(0, length), previousNodeNumber);
-		return result;
+		return regexToTransitions(regEx.Substring(0, length), previousNodeNumber);
 	}
 }
 }
