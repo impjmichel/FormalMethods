@@ -54,11 +54,11 @@
     <Compile Include="Source\Model\Automat.cs" />
     <Compile Include="Source\Model\DFA.cs" />
     <Compile Include="Source\Model\NDFA.cs" />
-    <Compile Include="Source\Model\Node.cs" />
     <Compile Include="Source\Model\RegBase.cs" />
     <Compile Include="Source\Model\RegExp.cs" />
     <Compile Include="Source\Model\RegGram.cs" />
     <Compile Include="Source\Model\Transition.cs" />
+    <Compile Include="Source\Model\Util.cs" />
     <Compile Include="Source\View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

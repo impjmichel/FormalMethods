@@ -9,17 +9,29 @@ namespace Models
 
 class RegGram : RegBase
 {
-	private Node startNode = new Node();
-	private List<Node> endNodes = new List<Node>();
-	private List<Node> nodes = new List<Node>();
+	private Alphabet mAlphabet;
+	private string mInput;
 
-	private char[] alphabet = new char[] { 'a', 'b' };
-
-	public string CreateGraphizString(string input)
+	public RegGram(Alphabet alphabet)
 	{
+		mAlphabet = alphabet;
+	}
+	public RegGram(Alphabet alphabet, string input)
+	{
+		mAlphabet = alphabet;
+		mInput = input;
+	}
+
+	/// <summary>
+	/// direct GraphViz use, without going to NDFA (it does create NDFA picture)
+	/// </summary>
+	public string CreateGraphizString()
+	{
+		if (mInput == null)
+			return null;
 		string result = "";
 		string endNode = "end";
-		string[] lines = input.Split(new Char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+		string[] lines = mInput.Split(new Char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
 		// begin
 		result += cBeginRegGrammar + cStartingPoint + lines[0].Trim()[0] + stop;
@@ -70,135 +82,10 @@ class RegGram : RegBase
 		return result;
 	}
 
-
-	private string toDFA(string graphVizInput)
+	public NDFA toNDFA()
 	{
-		fillNodeLists(graphVizInput);
-
-		List<Node> todoNodes = new List<Node>();
-		List<Node> newNodes = new List<Node>();
-		List<Node> newEndNodes = new List<Node>();
-		Node newStartNode = new Node(startNode.name);
-		newStartNode = fillNewNode(newStartNode, startNode);
-		todoNodes.Add(newStartNode);
-
-		while(todoNodes.Count > 0)
-		{
-			Node node = todoNodes[0];
-			foreach (var pair in node.DFAoperators)
-			{
-				Node newNode = new Node();
-				newNode.name = "";
-				foreach (string next in pair.Value.ToList<string>())
-				{
-					if (pair.Value.ToList<string>().IndexOf(next) != 0)
-					{
-						newNode.name += ",";
-					}
-					newNode.name += next;
-					Node tempNode = nodes.Find(x => x.name == next);
-					if (tempNode != null)
-					{
-						fillNewNode(newNode, tempNode);
-					}
-				}
-				todoNodes.Add(newNode);
-			}
-			newNodes.Add(node);
-			todoNodes.Remove(node);
-		}
-		return toDFAString(newStartNode, newNodes, newEndNodes);
-	}
-
-	private void fillNodeLists(string graphVizInput)
-	{
-		int start = graphVizInput.IndexOf("x->");
-		string importantPart = graphVizInput.Substring(start);
-		string[] operators = importantPart.Split(new Char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-		startNode.name = operators[0].Substring(3);
-		nodes.Add(startNode);
-		for (int i = 1; i < operators.Length; ++i)
-		{
-			if (operators[i].Contains(cTo))
-			{
-				// operator
-				Node newNode = new Node();
-				int arrowIndex = operators[i].IndexOf(cTo);
-				string name = operators[i].Substring(0, arrowIndex);
-				newNode.name = name;
-
-				if (!nodes.Contains(newNode))
-				{
-					nodes.Add(newNode);
-				}
-				Node tempNode = nodes.Find(item => item.name == name);
-				if (tempNode != null)
-				{
-					string withoutFirstPart = operators[i].Replace(name + cTo, String.Empty);
-					if (withoutFirstPart.Contains('['))
-					{
-						string op = withoutFirstPart.Split('[')[0];
-						op += "," + withoutFirstPart.Substring(withoutFirstPart.Length - 2, 1);
-						tempNode.operators.Add(op);
-					}
-					else
-					{
-						tempNode.operators.Add(withoutFirstPart + ",y");
-					}
-				}
-			}
-			else if (operators[i].Contains(cEndingCircle))
-			{
-				// end thingy
-				Node endingNode = new Node();
-				int index = operators[i].IndexOf(cEndingCircle);
-				endingNode.name = operators[i].Substring(0, index);
-				nodes.Add(endingNode);
-				endNodes.Add(endingNode);
-			}
-		}
-	}
-
-	/// <summary>
-	/// only call when going to DFA and startNode is filled.
-	/// </summary>
-	private Node fillNewNode(Node newNode, Node oldNode)
-	{
-		foreach (string op in oldNode.operators)
-		{
-			string nextNode = op.Split(',')[0];
-			char transition = op.Split(',')[1][0];
-			if (newNode.DFAoperators.ContainsKey(transition))
-			{
-				SortedSet<string> oldOp = newNode.DFAoperators[transition];
-				oldOp.Add(nextNode);
-			}
-			else
-			{
-				newNode.DFAoperators.Add(transition, new SortedSet<string>() { nextNode });
-			}
-		}
-		return newNode;
-	}
-
-	private string toDFAString(Node start, List<Node> nodes, List<Node> end)
-	{
-		string result = cBeginRegGrammar + cStartingPoint + start.name + stop;
-		foreach (Node node in nodes)
-		{
-			result += node.name + cTo + node.DFAoperators['a'].ToList<string>()[0] + stop;
-			result += node.name + cTo + node.DFAoperators['b'].ToList<string>()[0] + stop;
-		}
-		for (int i = 0; i < end.Count; ++i)
-		{
-			result += end[i].name + cEndingCircle;
-			if (i < end.Count - 1)
-			{
-				result += stop;
-			}
-		}
-		result += cEndRegGrammar;
-		return result;
+		//TODO
+		throw new NotImplementedException();
 	}
 }
 }

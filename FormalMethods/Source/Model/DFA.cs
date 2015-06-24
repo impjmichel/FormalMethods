@@ -24,7 +24,7 @@ class DFA : Automat
 					return false;
 			}
 			// check if every node has the right number of transitions
-			foreach(string node in mNodes)
+			foreach(string node in nodes)
 			{
 				List<Transition> fromTransitions = mTransitions.FindAll(x => x.from == node);
 				if (fromTransitions.Count != alphabetCount)
