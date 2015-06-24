@@ -13,7 +13,12 @@ class RegGram : RegBase
 	private List<Node> endNodes = new List<Node>();
 	private List<Node> nodes = new List<Node>();
 
-	private char[] alphabet = new char[] { 'a', 'b' };
+    private Alphabet alphabet;
+
+    public RegGram(Alphabet alpha)
+    {
+        alphabet = alpha;
+    }
 
 	public string CreateGraphizString(string input)
 	{

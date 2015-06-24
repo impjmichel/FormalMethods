@@ -11,12 +11,15 @@ class RegExp : RegBase
 	private bool bracketOpen = false;
 
 	private string exp;
+    private Alphabet alphabet;
 
 	public RegExp()
 	{
 	}
-	public RegExp(string input)
+
+	public RegExp(string input, Alphabet alpha)
 	{
+        alphabet = alpha;
 		exp = input;
 	}
 
