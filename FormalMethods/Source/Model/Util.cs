@@ -59,5 +59,22 @@ public static class Util
 		return set;
 	}
 
+
+
+	/// <summary>
+	/// checks if it's true, if false throws Exception.
+	/// </summary>
+	public static void Assert(bool assertion)
+	{
+		Assert(assertion, "");
+	}
+	/// <summary>
+	/// checks if it's true, if false throws Exception with a message.
+	/// </summary>
+	public static void Assert(bool assertion, string message)
+	{
+		if (!assertion)
+			throw new Exception(message);
+	}
 }
 }

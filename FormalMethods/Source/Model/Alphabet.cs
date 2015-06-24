@@ -9,7 +9,7 @@ namespace Models
 public class Alphabet
 {
 	private SortedSet<char> mCharacters;
-	public const char Epsylon = 'y';
+	public const char Epsylon = 'ƹ';
 
 	public SortedSet<char> characters
 	{
