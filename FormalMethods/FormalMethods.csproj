@@ -53,6 +53,7 @@
     <Compile Include="Source\Model\Alphabet.cs" />
     <Compile Include="Source\Model\Automat.cs" />
     <Compile Include="Source\Model\DFA.cs" />
+    <Compile Include="Source\Model\FileReader.cs" />
     <Compile Include="Source\Model\NDFA.cs" />
     <Compile Include="Source\Model\RegBase.cs" />
     <Compile Include="Source\Model\RegExp.cs" />
