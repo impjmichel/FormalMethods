@@ -101,7 +101,7 @@ class NDFA : Automat
 		HashSet<Transition> newTransitions = new HashSet<Transition>();
 		foreach (char transition in mAlphabet.characters)
 		{
-			SortedList<string, string> accessableNodes = getAllAccessableNodes(currentNode, transition);
+			SortedSet<string> accessableNodes = getAllAccessableNodes(currentNode, transition);
 			if (accessableNodes.Count == 0)
 			{
 				Transition toFailState = new Transition(transition, currentNode, Automat.cFailState);
@@ -114,66 +114,6 @@ class NDFA : Automat
 			}
 		}
 		return newTransitions;
-	}
-
-
-	/// <summary>
-	/// method to get all nodes that are accessable by 'node' with the 'transition',
-	/// to disable epsylon transition set 'withEpsylon' to false
-	/// </summary>
-	private SortedList<string, string> getAllAccessableNodes(string node, char transition, bool withEpsylon = true)
-	{
-		SortedList<string, string> result = new SortedList<string, string>();
-		HashSet<Transition> resultTransitions = new HashSet<Transition>();
-		List<Transition> allNodeTransitions = mTransitions.FindAll(x => x.from == node);
-
-		List<Transition> charTransitions = allNodeTransitions.FindAll(x => x.label == transition);
-		resultTransitions.UnionWith(charTransitions);
-
-		// epsylon transitions
-		if (withEpsylon)
-		{
-			HashSet<Transition> startTransitions = getAllEpsylonTransitions(node);
-			HashSet<Transition> midTransitions = new HashSet<Transition>();
-			foreach (Transition trans in startTransitions)
-			{
-				midTransitions.UnionWith(getAllCharTransitions(trans.to, transition));
-			}
-			HashSet<Transition> endTransitions = new HashSet<Transition>();
-			foreach (Transition trans in midTransitions)
-			{
-				endTransitions.UnionWith(getAllEpsylonTransitions(trans.to));
-			}
-			endTransitions.UnionWith(midTransitions); // note: not the startTransitions, because it can't stop without using the char transition.
-			resultTransitions.UnionWith(endTransitions);
-		}
-		// from transition to node names:
-		foreach (Transition trans in resultTransitions)
-		{
-			result.Add(trans.to, trans.to);
-		}
-		return result;
-	}
-
-	private HashSet<Transition> getAllCharTransitions(string startNode, char transition)
-	{
-		HashSet<Transition> result = new HashSet<Transition>();
-		result.UnionWith(mTransitions.FindAll(x => (x.from == startNode) && (x.label == transition)));
-		return result;
-	}
-
-	private HashSet<Transition> getAllEpsylonTransitions(string startNode)
-	{
-		HashSet<Transition> allTransitions = new HashSet<Transition>();
-		allTransitions.UnionWith(mTransitions.FindAll(x => (x.from == startNode) && (x.label == Alphabet.Epsylon)));
-		if (allTransitions.Count > 0)
-		{
-			foreach (Transition trans in allTransitions)
-			{
-				allTransitions.UnionWith(getAllEpsylonTransitions(trans.from));
-			}
-		}
-		return allTransitions;
 	}
 }
 }
