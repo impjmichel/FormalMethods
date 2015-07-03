@@ -14,6 +14,7 @@ class RegExp : RegBase
 	private string mRegEx;
 	private Alphabet mAlphabet;
 
+#region public
 	public RegExp(string regEx, Alphabet alpha)
 	{
 		mAlphabet = alpha;
@@ -30,7 +31,9 @@ class RegExp : RegBase
 		ndfa.endNodes.Add("" + mCurrentNodeNumber); // shouldn't be reset yet...
 		return ndfa;
 	}
+#endregion
 
+#region private
 	private List<Transition> regexToTransitions()
 	{
 		mCurrentNodeNumber = 0;
@@ -39,6 +42,7 @@ class RegExp : RegBase
 
 	private List<Transition> regexToTransitions(string regEx, int previousNodeNumber = 0)
 	{
+		Console.WriteLine("REGEX:  " + mRegEx);
 		List<Transition> result = new List<Transition>();
 
 		for (int i = 0; i < mRegEx.Length; ++i)
@@ -79,7 +83,7 @@ class RegExp : RegBase
 					break;
 				case '+':
 					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + previousNodeNumber);
-					result.Add(tempTransition);
+					result.Add(new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + previousNodeNumber));
 					if (orEnd && !bracketOpen)
 					{
 						tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
@@ -116,13 +120,28 @@ class RegExp : RegBase
 					result.Add(tempTransition);
 					mCurrentNodeNumber = mOrEnd + 1;
 					break;
+				case '?':
+					tempTransition = new Transition(Alphabet.Epsylon, "" + previousNodeNumber, "" + mCurrentNodeNumber);
+					result.Add(tempTransition);
+					if (orEnd && !bracketOpen)
+					{
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
+						mCurrentNodeNumber++;
+						tempTransition.to = "" + mCurrentNodeNumber;
+						result.Add(tempTransition);
+						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);
+						result.Add(tempTransition);
+						orEnd = false;
+						orStarted = false;
+					}
+					break;
 				default:
 					if (mAlphabet.characters.Contains(ch))
 					{
 						previousNodeNumber = mCurrentNodeNumber;
 						mCurrentNodeNumber++;
 						tempTransition = new Transition(ch, "" + previousNodeNumber, "" + mCurrentNodeNumber);
-						result.Add(tempTransition);
+						result.Add(new Transition(ch, "" + previousNodeNumber, "" + mCurrentNodeNumber));
 					}
 					break;
 			}
@@ -148,5 +167,6 @@ class RegExp : RegBase
 		}
 		return regexToTransitions(regEx.Substring(0, length), previousNodeNumber);
 	}
+#endregion
 }
 }

@@ -134,10 +134,12 @@ class Automat : RegBase
 		allTransitions.UnionWith(mTransitions.FindAll(x => (x.from == startNode) && (x.label == Alphabet.Epsylon)));
 		if (allTransitions.Count > 0)
 		{
+			HashSet<Transition> extraSet = new HashSet<Transition>();
 			foreach (Transition trans in allTransitions)
 			{
-				allTransitions.UnionWith(getAllEpsylonTransitions(trans.from));
+				extraSet.UnionWith(getAllEpsylonTransitions(trans.from));
 			}
+			allTransitions.UnionWith(extraSet);
 		}
 		return allTransitions;
 	}
