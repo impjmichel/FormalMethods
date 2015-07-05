@@ -41,6 +41,7 @@ public partial class Form1 : Form
 	
 	public Form1()
 	{
+
 		InitializeComponent();
 	}
 
@@ -73,13 +74,14 @@ public partial class Form1 : Form
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
+            
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            //this.tabControl1.Controls.Add(this.tabPage4);
+            //this.tabControl1.Controls.Add(this.tabPage4);            
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -273,6 +275,10 @@ public partial class Form1 : Form
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(294, 317);
             this.dataGridView1.TabIndex = 0;
+            //
+            // Style
+            //
+            this.BackColor = System.Drawing.Color.Black;
             // 
             // Form1
             // 
