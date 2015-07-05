@@ -137,7 +137,12 @@ class Automat : RegBase
 			HashSet<Transition> extraSet = new HashSet<Transition>();
 			foreach (Transition trans in allTransitions)
 			{
-				extraSet.UnionWith(getAllEpsylonTransitions(trans.from));
+				HashSet<Transition> tempSet = new HashSet<Transition>(mTransitions.FindAll(x => (x.from == trans.from) && (x.label == Alphabet.Epsylon)));
+				if (tempSet.Count > 0)
+				{
+					extraSet.UnionWith(tempSet);
+				}
+				//extraSet.UnionWith(getAllEpsylonTransitions(trans.from));
 			}
 			allTransitions.UnionWith(extraSet);
 		}

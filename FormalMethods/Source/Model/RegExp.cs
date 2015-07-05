@@ -188,13 +188,22 @@ class RegExp : RegBase
 
 	private List<Transition> HandleOpenBracket(string regEx, int previousNodeNumber, out int length)
 	{
-		length = 0;
+		int tempLength = 0;
 		for (int i = regEx.Length -1; i > 0; --i )
 		{
 			if (regEx[i] == ')')
 			{
-				length = i + 1;
+				tempLength = i + 1;
+				break;
 			}
+		}
+		if (tempLength > regEx.Length)
+		{
+			length = regEx.Length;
+		}
+		else
+		{
+			length = tempLength;
 		}
 		return regexToTransitions(regEx.Substring(0, length), previousNodeNumber);
 	}

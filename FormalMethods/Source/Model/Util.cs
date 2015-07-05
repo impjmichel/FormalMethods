@@ -44,7 +44,10 @@ public static class Util
 		SortedList<string, string> list = new SortedList<string, string>();
 		foreach (string str in result)
 		{
-			list.Add(str, str);
+			if (!list.ContainsKey(str))
+			{
+				list.Add(str, str);
+			}
 		}
 		return list;
 	}
