@@ -30,8 +30,13 @@ namespace Models
                     Console.WriteLine("file could not be read");
                     Console.WriteLine(e.Message);
                 }
+                return deleteEmpty(line);
             }
-            return deleteEmpty(line);
+            else
+            {
+                return null;
+            }
+            
         }
 
         private string deleteEmpty(string line)
