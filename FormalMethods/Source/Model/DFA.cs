@@ -61,6 +61,14 @@ class DFA : Automat
 		return result;
 	}
 
+	public DFA minimalize()
+	{
+		NDFA reverse1 = reverse();
+		DFA dfa2 = reverse1.toDFA();
+		NDFA reverse2 = dfa2.reverse();
+		return reverse2.toDFA();
+	}
+
 	public static NDFA reverse(DFA oldDFA)
 	{
 		NDFA result = new NDFA(oldDFA.alphabet);
