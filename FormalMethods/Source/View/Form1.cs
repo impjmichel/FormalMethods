@@ -313,8 +313,9 @@ public partial class Form1 : Form
             if (checkString(input))
             {
                 RegExp reg = new RegExp(input, alpha);
-
-                string test = reg.toNDFA().toDFA().toGraphVizString();
+				NDFA tempNDFA = reg.toNDFA();
+				DFA tempDFA = tempNDFA.toDFA();
+				string test = tempDFA.toGraphVizString();
 				if (toDFA)
 				{
 					test = reg.toNDFA().toDFA().toGraphVizString();
