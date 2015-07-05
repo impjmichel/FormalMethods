@@ -10,9 +10,12 @@ namespace Models
 {
     class FileReader
     {
-        public string getFileContent()
+        private string alphabet;
+        private string cleanedInput;
+        private string line;
+
+        public FileReader()
         {
-            string line = null;
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "txt | *.txt";
 
@@ -23,35 +26,80 @@ namespace Models
                 try
                 {
                     StreamReader sr = new StreamReader(file);
-                    line = sr.ReadToEnd();                    
+                    this.line = sr.ReadToEnd();                    
                 }
                 catch(Exception e)
                 {
                     Console.WriteLine("file could not be read");
                     Console.WriteLine(e.Message);
                 }
-                return deleteEmpty(line);
-            }
-            else
-            {
-                return null;
-            }
-            
+
+                string[] lines = deleteEmpty(this.line);
+                this.cleanedInput = this.linesToString(lines);
+                if(!checkAlphabet(lines[0]))
+                {
+                    MessageBox.Show("This file doesn't contain an alphabet");
+                }
+            }            
         }
 
-        private string deleteEmpty(string line)
+        public string getRawInput()
+        {
+            return this.line;
+        }
+
+        public string getAlphabet()
+        {
+            return this.alphabet;            
+        }
+
+        public string getInput()
+        {
+            return this.cleanedInput;
+        }
+
+        private string[] deleteEmpty(string line)
+        {            
+            string[] inputLines = null;
+
+            inputLines = line.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            inputLines = inputLines.Where(x => !string.IsNullOrEmpty(x)).ToArray();        
+
+            return inputLines;
+        }
+
+        private string linesToString(string[] inputLines)
         {
             string newInput = "";
-            string[] lines = line.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            lines = lines.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 1; i < inputLines.Length; i++)
             {
-                newInput += lines[i] + Environment.NewLine;
+                newInput += inputLines[i] + Environment.NewLine;
             }
 
             return newInput;
+        }       
+
+        public bool checkAlphabet(string line)
+        {
+            if(line.Length > 1)
+            {
+                if(line.Contains(','))
+                {
+                    this.alphabet = line;
+                    return true;                     
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                this.alphabet = line;
+                return true;
+            }            
         }
 
         public int getOption(string line)
