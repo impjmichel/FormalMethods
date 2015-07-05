@@ -148,5 +148,14 @@ class RegExp : RegBase
 		}
 		return regexToTransitions(regEx.Substring(0, length), previousNodeNumber);
 	}
+
+    public List<string> allowedWords()
+    {
+        List<string> words = new List<string>();
+
+
+
+        return words;
+    }
 }
 }

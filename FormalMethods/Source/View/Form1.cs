@@ -29,6 +29,11 @@ public partial class Form1 : Form
     private TextBox textBox4;
     private Label label4;
     private Button button3;
+    private TextBox textBox5;
+    private Label label5;
+    private TabPage tabPage4;
+    private Button button4;
+    private DataGridView dataGridView1;
 	private TabPage tabPage2;
 	
 	public Form1()
@@ -52,11 +57,18 @@ public partial class Form1 : Form
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button4 = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -64,6 +76,7 @@ public partial class Form1 : Form
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -187,6 +200,8 @@ public partial class Form1 : Form
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.textBox5);
             this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
@@ -195,6 +210,24 @@ public partial class Form1 : Form
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "file input";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(191, 21);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(66, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "File contains";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Enabled = false;
+            this.textBox5.Location = new System.Drawing.Point(194, 37);
+            this.textBox5.Multiline = true;
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(296, 245);
+            this.textBox5.TabIndex = 1;
             // 
             // button3
             // 
@@ -205,6 +238,36 @@ public partial class Form1 : Form
             this.button3.Text = "Open file";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.button4);
+            this.tabPage4.Controls.Add(this.dataGridView1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(862, 335);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(320, 15);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(108, 49);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "Load DFA";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 15);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(294, 317);
+            this.dataGridView1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -217,6 +280,9 @@ public partial class Form1 : Form
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
 	}
@@ -236,10 +302,10 @@ public partial class Form1 : Form
             if (checkString(input))
             {
                 RegExp reg = new RegExp(input, alpha);
-                string test = reg.CreateGraphizString(input);
+                /*string test = reg.CreateGraphizString(input);
                 popup pu = new popup();
                 pu.Graphiz(test);
-                pu.Show();
+                pu.Show();*/
             }
             else
             {
@@ -326,23 +392,7 @@ public partial class Form1 : Form
 
     public void kindOfInput(string line)
     {
-        string newInput = "";
-        string[] lines = line.Split(new string[] {"\r\n", "\n"},StringSplitOptions.None);
-
-        lines = lines.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
-        if (lines.Length > 1)
-        {
-            for (int i = 0; i < lines.Length; i++)
-            {
-                newInput += lines[i] + Environment.NewLine;
-            }
-            regGram(newInput);
-        }
-        else if(lines.Length == 1)
-        {
-            regExp(line);
-        }
+       
     }
     
 
@@ -350,7 +400,21 @@ public partial class Form1 : Form
     {
         FileReader fr = new FileReader();
         string input = fr.getFileContent();
-        kindOfInput(input);
+        int option = fr.getOption(input);
+
+        switch (option)
+        {
+            case 0: regGram(input); break;
+            case 1: regExp(input); break;
+        }
+
+        this.textBox5.Text = input;
+    }
+
+    private void button4_Click(object sender, EventArgs e)
+    {
+        FileReader fr = new FileReader();
+        var dfa = fr.loadDFA();
     }
 
     
