@@ -66,6 +66,31 @@ class NDFA : Automat
 				}
 			}
 		}
+
+		HashSet<string> all_TO_nodes = new HashSet<string>();
+		HashSet<string> all_FROM_nodes = new HashSet<string>();
+		foreach (Transition tr in result.transitions)
+		{
+			all_TO_nodes.Add(tr.to);
+			all_FROM_nodes.Add(tr.from);
+		}
+		foreach (string from in all_FROM_nodes)
+		{
+			if (!result.startNodes.Contains(from))
+			{
+				bool check = false;
+				foreach (Transition tr in result.transitions)
+				{
+					if (tr.to == from)
+						check = true;
+				}
+				if (!check)
+				{
+					result.transitions.RemoveAll(x => x.from == from);
+				}
+			}
+			
+		}
 		//if (result.isDFA())
 			return result;
 		//else
