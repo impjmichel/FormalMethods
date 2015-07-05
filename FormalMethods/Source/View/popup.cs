@@ -17,9 +17,11 @@ namespace FormalMethods
 	public partial class popup : Form
 	{
         private string name;
+        private string machine;
 		
-        public popup(string name)
+        public popup(string name, string machine)
 		{
+            this.machine = machine;
             this.name = name;
 			InitializeComponent();
             this.label1.Text = name;
