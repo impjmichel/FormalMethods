@@ -16,9 +16,13 @@ namespace FormalMethods
 {
 	public partial class popup : Form
 	{
-		public popup()
+        private string name;
+		
+        public popup(string name)
 		{
+            this.name = name;
 			InitializeComponent();
+            this.label1.Text = name;
 		}
 
 		public void Graphiz(string input)
@@ -35,6 +39,6 @@ namespace FormalMethods
 			byte[] output = wrapper.GenerateGraph(input, Enums.GraphReturnType.Png);
 			MemoryStream ms = new MemoryStream(output);
 			pictureBox1.Image = Image.FromStream(ms);
-		}
+        }
 	}
 }

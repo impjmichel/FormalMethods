@@ -13,6 +13,7 @@ namespace Models
         private string alphabet;
         private string cleanedInput;
         private string line;
+        private string[] lines;
 
         public FileReader()
         {
@@ -34,9 +35,11 @@ namespace Models
                     Console.WriteLine(e.Message);
                 }
 
-                string[] lines = deleteEmpty(this.line);
-                this.cleanedInput = this.linesToString(lines);
-                if(!checkAlphabet(lines[0]))
+                this.lines = toCleanArray(this.line);
+                
+                this.cleanedInput = this.linesToString(this.lines);
+                
+                if (!checkAlphabet(this.alphabet))
                 {
                     MessageBox.Show("This file doesn't contain an alphabet");
                 }
@@ -58,13 +61,15 @@ namespace Models
             return this.cleanedInput;
         }
 
-        private string[] deleteEmpty(string line)
+        private string[] toCleanArray(string line)
         {            
             string[] inputLines = null;
 
             inputLines = line.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            inputLines = inputLines.Where(x => !string.IsNullOrEmpty(x)).ToArray();        
+            inputLines = inputLines.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            this.alphabet = inputLines[0];
+            inputLines = inputLines.Where(x => x != inputLines[0]).ToArray();
 
             return inputLines;
         }
@@ -73,11 +78,10 @@ namespace Models
         {
             string newInput = "";
 
-            for (int i = 1; i < inputLines.Length; i++)
+            for (int i = 0; i < inputLines.Length; i++)
             {
                 newInput += inputLines[i] + Environment.NewLine;
             }
-
             return newInput;
         }       
 
@@ -105,13 +109,12 @@ namespace Models
         public int getOption(string line)
         {
             int option = 0;
-            string[] lines = line.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            if (lines.Length > 1)
+            if (this.lines.Length > 1)
             {
                 option = 0;  //regGram
             }
-            else if (lines.Length == 1)
+            else if (this.lines.Length == 1)
             {
                 option = 1; //regExp
             }

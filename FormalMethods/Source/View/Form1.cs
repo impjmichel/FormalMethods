@@ -307,13 +307,13 @@ public partial class Form1 : Form
             if (checkString(input))
             {
                 RegExp reg = new RegExp(input, alpha);
-				
-                string test = reg.toNDFA().toGraphVizString();
+
+                string test = reg.toNDFA().toDFA().toGraphVizString();
 				if (toDFA)
 				{
 					test = reg.toNDFA().toDFA().toGraphVizString();
 				}
-                popup pu = new popup();
+                popup pu = new popup(input);
                 pu.Graphiz(test);
                 pu.Show();
             }
@@ -342,7 +342,7 @@ public partial class Form1 : Form
             RegGram reg = new RegGram(alpha, boxInput);
             //string test = reg.CreateGraphizString(textBox2.Text);
             string test = reg.toNDFA().toGraphVizString();
-            popup pu = new popup();
+            popup pu = new popup(boxInput);
             pu.Graphiz(test);
             pu.Show();
          }
@@ -357,6 +357,7 @@ public partial class Form1 : Form
 		input.Replace(" ", string.Empty);
 		if (String.IsNullOrEmpty(input))
 		{
+            MessageBox.Show("string is empty");
 			return false;
 		}
 		if (input.Contains('|'))

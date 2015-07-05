@@ -49,6 +49,7 @@ class RegExp : RegBase
 		{
 			Transition tempTransition;
 			char ch = mRegEx[i];
+            Console.WriteLine(ch);
 			switch (ch) // special RegEx characters: ( ) + * |
 			{
 				case '(':
@@ -57,13 +58,17 @@ class RegExp : RegBase
 						bracketOpen = true;
 					}
 					// open bracket
-					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
+					/*
+                     * Dit is niet nodig. hierdoor tekent hij veel onnodige states
+                     * 
+                    tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
 					previousNodeNumber = mCurrentNodeNumber;
 					mCurrentNodeNumber++;
 					tempTransition.to = "" + mCurrentNodeNumber;
 					result.Add(tempTransition);
+                    */
                     //-------------------------------
-
+                                        
                     //dirty but no crash
                     string sub = null;
                     if (regEx.Length > 1)
@@ -82,7 +87,7 @@ class RegExp : RegBase
 					int endOfBracket;
 					result.AddRange(HandleOpenBracket(sub, previousNodeNumber, out endOfBracket));
                     
-					i += endOfBracket; //Found the problem!!! no idea to fix it (when endOf/bracket is replaced with just the length of regEx it works fine)
+					i += endOfBracket;//Found the problem!!! no idea to fix it (when endOfbracket is replaced with just the length of regEx it works fine)
                 
 					//-------------------------------
                     break;
@@ -171,6 +176,13 @@ class RegExp : RegBase
 				orEnd = true;
 			}
 		}
+
+        int count = 0;
+        foreach(Transition res in result)
+        {
+            count++;
+            Console.WriteLine(count);
+        }
 		return result;
 	}
 

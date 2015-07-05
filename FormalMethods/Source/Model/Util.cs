@@ -82,7 +82,11 @@ public static class Util
  *	1)	RegExp.cs:
  *			regexToTransitions 
  *			case '('  gaat mis, hier gebeuren rare dingen!
- *
+ *			
+ *          //------------------------------------------------------------------------------------------------------
+ *          //@JM ik heb wat commentaar in de RegExp gezet vanaf lijn 61
+ *          //------------------------------------------------------------------------------------------------------
+ * 
  *	2)	NDFA.cs:
  *			toDFA
  *				-> Automat.cs
