@@ -11,7 +11,7 @@ class Automat : RegBase
 	protected SortedSet<string> mEndNodes = new SortedSet<string>();
 	protected Alphabet mAlphabet;
 
-	public const string cFailState = "Ø";
+	public const string cFailState = "FAIL";
 
 	public Alphabet alphabet
 	{

@@ -14,12 +14,17 @@ public static class Util
 	public static string toCSV(SortedList<string, string> list)
 	{
 		string result = "";
-		foreach (string str in list.Values)
+		if (list.Count > 0)
 		{
-			result += str + ",";
+			foreach (string str in list.Values)
+			{
+				result += str + ",";
+			}
+			result.Remove(result.Length - 1); // removing the last comma
+			return result;
 		}
-		result.Remove(result.Length - 1); // removing the last comma
-		return result;
+		return null;
+		
 	}
 	/// <summary>
 	/// method to create a single Comma Seperated Value string from a Sorted Set
@@ -27,11 +32,14 @@ public static class Util
 	public static string toCSV(SortedSet<string> set)
 	{
 		string result = "";
-		foreach (string str in set)
+		for (int i = 0; i < set.Count; ++i)
 		{
-			result += str + ",";
+			result += set.ElementAt<string>(i);
+			if (i < set.Count -1)
+			{
+				result += ",";
+			}
 		}
-		result.Remove(result.Length - 1); // removing the last comma
 		return result;
 	}
 

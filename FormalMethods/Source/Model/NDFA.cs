@@ -47,7 +47,10 @@ class NDFA : Automat
 			}
 			newTransitions.UnionWith(addedTransitions);
 			doneNodes.Add(currentNodes);
-			todoNodes.Add(Util.toCSV(addedNodes));
+			if (addedNodes.Count > 0)
+			{
+				todoNodes.Add(Util.toCSV(addedNodes));
+			}
 		}
 		result.transitions.AddRange(newTransitions);
 
@@ -63,10 +66,10 @@ class NDFA : Automat
 				}
 			}
 		}
-		if (result.isDFA())
+		//if (result.isDFA())
 			return result;
-		else
-			return null; 
+		//else
+		//	return null;
 		}
 
 	public NDFA reverse()
