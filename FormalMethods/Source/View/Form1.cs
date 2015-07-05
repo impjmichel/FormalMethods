@@ -480,6 +480,9 @@ public partial class Form1 : Form
 			this.tabPage3.ResumeLayout(false);
 			this.ResumeLayout(false);*/
 
+            textBox3.Text = "a,b";
+            textBox1.Text = "(a|b)";
+
 	}
 
 	private void button1_Click(object sender, EventArgs e)
@@ -497,18 +500,15 @@ public partial class Form1 : Form
             if (checkString(input))
             {
                 RegExp reg = new RegExp(input, alpha);
-                /*string test = reg.CreateGraphizString(input);
-=======
 				
                 string test = reg.toNDFA().toGraphVizString();
 				if (toDFA)
 				{
 					test = reg.toNDFA().toDFA().toGraphVizString();
 				}
->>>>>>> 377233dbba03f3ef1beb97d6055af24fc0750446
                 popup pu = new popup();
                 pu.Graphiz(test);
-                pu.Show();*/
+                pu.Show();
             }
             else
             {
