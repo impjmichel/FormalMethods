@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-class Transition : IComparable<Transition>
+public class Transition : IComparable<Transition>
 {
 	private string mFrom;
 	private string mTo;
@@ -54,11 +54,22 @@ class Transition : IComparable<Transition>
 
 	public int CompareTo(Transition other)
 	{
-		if (mFrom == other.from && mTo == other.to && mLabel == other.label)
+		if (other.label == mLabel)
 		{
-			return 0;
+			if (other.from == mFrom)
+			{
+				return mTo.CompareTo(other.to);
+			}
+			else
+			{
+				return mFrom.CompareTo(other.from);
+			}
 		}
-		return mLabel.CompareTo(other.label);
+		else
+		{
+			return mLabel.CompareTo(other.label);
+		}
+		
 	}
 }
 }

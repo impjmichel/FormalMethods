@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Models
 {
-class Automat : RegBase
+public class Automat : RegBase
 {
 	protected string mInput;
 	protected List<Transition> mTransitions = new List<Transition>();

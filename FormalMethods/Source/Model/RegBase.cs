@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-class RegBase
+public class RegBase
 {
 	protected const string cBeginRegGrammar = "digraph usage{graph [rankdir=LR,fontsize=8]; node [shape=circle, color=black]";
 	protected const string cEndingCircle = "[shape=circle,peripheries=2]";

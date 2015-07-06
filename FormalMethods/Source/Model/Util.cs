@@ -85,6 +85,73 @@ public static class Util
 		if (!assertion)
 			throw new Exception(message);
 	}
+
+
+
+	public static NDFA ndfaStartsWith(string start, Alphabet alphabet)
+	{
+		NDFA result = new NDFA(alphabet);
+		int state = 0;
+		result.startNodes.Add("" + state);
+		foreach (char ch in start)
+		{
+			Transition tr = new Transition(ch, "" + state);
+			state++;
+			tr.to = "" + state;
+			result.transitions.Add(tr);
+		}
+		result.endNodes.Add("" + state);
+		foreach(char ch in alphabet.characters)
+		{
+			result.transitions.Add(new Transition(ch, "" + state, "" + state));
+		}
+		return result;
+	}
+
+
+	public static NDFA ndfaEndsWith(string end, Alphabet alphabet)
+	{
+		NDFA result = new NDFA(alphabet);
+		int state = 0;
+		result.startNodes.Add("" + state);
+		foreach (char ch in alphabet.characters)
+		{
+			result.transitions.Add(new Transition(ch, "" + state, "" + state));
+		}
+		foreach (char ch in end)
+		{
+			Transition tr = new Transition(ch, "" + state);
+			state++;
+			tr.to = "" + state;
+			result.transitions.Add(tr);
+		}
+		result.endNodes.Add("" + state);
+		return result;
+	}
+
+	public static NDFA ndfaContains(string middle, Alphabet alphabet)
+	{
+		NDFA result = new NDFA(alphabet);
+		int state = 0;
+		result.startNodes.Add("" + state);
+		foreach (char ch in alphabet.characters)
+		{
+			result.transitions.Add(new Transition(ch, "" + state, "" + state));
+		}
+		foreach (char ch in middle)
+		{
+			Transition tr = new Transition(ch, "" + state);
+			state++;
+			tr.to = "" + state;
+			result.transitions.Add(tr);
+		}
+		foreach (char ch in alphabet.characters)
+		{
+			result.transitions.Add(new Transition(ch, "" + state, "" + state));
+		}
+		result.endNodes.Add("" + state);
+		return result;
+	}
 }
 
 

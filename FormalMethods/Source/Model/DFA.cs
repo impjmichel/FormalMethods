@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Models
 {
 
-class DFA : Automat
+public class DFA : Automat
 {
 	public DFA(Alphabet alphabet)
 	{

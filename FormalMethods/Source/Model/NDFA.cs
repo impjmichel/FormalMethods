@@ -6,7 +6,7 @@ using System.Linq;
 namespace Models
 {
 
-class NDFA : Automat
+public class NDFA : Automat
 {
 	public NDFA(Alphabet alphabet)
 	{
@@ -51,7 +51,9 @@ class NDFA : Automat
 			}
 		}
 		result.transitions.AddRange(newTransitions);
+		//-------------------------------------------------------------------
 		// the '+' check:
+		Transition remove = null;
 		foreach (Transition tr in mTransitions)
 		{
 			if (tr.label != Alphabet.Epsylon)
@@ -59,11 +61,27 @@ class NDFA : Automat
 				Transition temp = mTransitions.Find(x => x.label == Alphabet.Epsylon && x.to == tr.from && x.from == tr.to);
 				if (temp != null)
 				{
-					result.transitions.Add(new Transition(tr.label, temp.from, temp.to));
+					result.transitions.Add(new Transition(tr.label, temp.from, temp.from));
+					remove = result.transitions.Find(x => x.label == tr.label && x.from == tr.to && x.to != tr.from);
+
+					// this is bullshit!!
+					//foreach (string csv in result.nodes)
+					//{
+					//	SortedSet<string> set = Util.toSet(csv);
+					//	if (set.Contains(end))
+					//	{
+					//		result.endNodes.Add(csv);
+					//	}
+					//}
+
 				}
 			}
 		}
-
+		if (remove != null)
+		{
+			result.transitions.Remove(remove);
+			remove = null;
+		}
 		//-------------------------------------------------------------------
 		// end states:
 		foreach (string end in mEndNodes)
@@ -119,7 +137,35 @@ class NDFA : Automat
 		//removing every node that isn't part of the nodes list:
 		result.endNodes.IntersectWith(result.nodes);
 		//-------------------------------------------------------------------
-		// failstate transitions:
+		// the '*' check:
+		foreach (Transition tr in mTransitions)
+		{
+			if (tr.label != Alphabet.Epsylon)
+			{
+				Transition goingBack = mTransitions.Find(x => x.label == Alphabet.Epsylon && x.to == tr.from && x.from == tr.to);
+				Transition goingForward = mTransitions.Find(x => x.label == Alphabet.Epsylon && x.to == tr.to && x.from == tr.from);
+				if (goingBack != null && goingForward != null)
+				{
+					SortedSet<string> accesableNodes = getAllAccessableNodes(goingForward.to, Alphabet.Epsylon);
+					accesableNodes.Add(goingForward.to);
+					foreach (string end in accesableNodes)
+					{
+						if (mEndNodes.Contains(goingForward.to))
+						{
+							foreach (string csv in result.nodes)
+							{
+								SortedSet<string> set = Util.toSet(csv);
+								if (set.Contains(end))
+								{
+									result.endNodes.Add(csv);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//-------------------------------------------------------------------
 		// failstate transitions:
 		foreach (char transition in mAlphabet.characters)
 		{
@@ -171,6 +217,13 @@ class NDFA : Automat
 		}
 		result.transitions.Clear();
 		result.transitions.AddRange(renamedTransitions);
+
+		SortedSet<Transition> sortedSet = new SortedSet<Transition>(result.transitions);
+		result.transitions.Clear();
+		foreach (Transition tr in sortedSet)
+		{
+			result.transitions.Add(tr);
+		}
 			//if (result.isDFA())
 			return result;
 		//else
@@ -202,7 +255,6 @@ class NDFA : Automat
 		}
 		return result;
 	}
-
 
 	private HashSet<Transition> getTransitions(string currentNode)
 	{
