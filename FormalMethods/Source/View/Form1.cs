@@ -41,7 +41,7 @@ public partial class Form1 : Form
 	
 	public Form1()
 	{
-
+        this.Text = "Formal Methods";
 		InitializeComponent();
 	}
 
@@ -313,16 +313,21 @@ public partial class Form1 : Form
             if (checkString(input))
             {
                 RegExp reg = new RegExp(input, alpha);
+
 				NDFA tempNDFA = reg.toNDFA();
 				DFA tempDFA = tempNDFA.toDFA();
-				string test = tempDFA.toGraphVizString();
-				if (toDFA)
-				{
-					test = reg.toNDFA().toDFA().toGraphVizString();
-				}
-                popup pu = new popup(input);
-                pu.Graphiz(test);
-                pu.Show();
+
+				string ndfa,dfa;
+                ndfa = tempNDFA.toGraphVizString();
+                dfa = tempDFA.toGraphVizString();
+
+                popup dfaPu = new popup(input, "DFA");
+                dfaPu.Graphiz(dfa);
+                dfaPu.Show();
+
+                popup ndfaPu = new popup(input, "NDFA");
+                ndfaPu.Graphiz(ndfa);
+                ndfaPu.Show();
             }
             else
             {
@@ -347,11 +352,21 @@ public partial class Form1 : Form
         {
             Alphabet alpha = new Alphabet(alphabetInput);
             RegGram reg = new RegGram(alpha, boxInput);
-            //string test = reg.CreateGraphizString(textBox2.Text);
-            string test = reg.toNDFA().toGraphVizString();
-            popup pu = new popup(boxInput);
-            pu.Graphiz(test);
-            pu.Show();
+
+            NDFA tempNDFA = reg.toNDFA();
+            //DFA tempDFA = tempNDFA.toDFA();
+
+            string ndfa, dfa;
+            ndfa = tempNDFA.toGraphVizString();
+            //dfa = tempDFA.toGraphVizString();
+
+            /*popup dfaPu = new popup(boxInput, "DFA");
+            dfaPu.Graphiz(dfa);
+            dfaPu.Show();*/
+
+            popup ndfaPu = new popup(boxInput, "NDFA");
+            ndfaPu.Graphiz(ndfa);
+            ndfaPu.Show();
          }
         else
         {

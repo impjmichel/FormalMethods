@@ -193,25 +193,17 @@ class RegExp : RegBase
 				orEnd = true;
 			}
 		}
-
-		//int count = 0;
-		//foreach(Transition res in result)
-		//{
-		//	count++;
-		//	Console.WriteLine(count);
-		//}
 		return result;
 	}
 
 	private List<Transition> HandleOpenBracket(string regEx, int previousNodeNumber, out int length)
 	{
-		int tempLength = 0;
+		length = 0;
 		for (int i = regEx.Length -1; i > 0; --i )
 		{
 			if (regEx[i] == ')')
 			{
-				tempLength = i + 1;
-				break;
+				length = i + 1;
 			}
 		}
 		if (tempLength > regEx.Length)
@@ -224,7 +216,6 @@ class RegExp : RegBase
 			length = tempLength;
 			return regexToTransitions(regEx.Substring(0, tempLength), previousNodeNumber);
 		}
-		
 	}
 
 #endregion
