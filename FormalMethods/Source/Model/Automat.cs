@@ -99,16 +99,18 @@ class Automat : RegBase
 		// epsylon transitions
 		if (withEpsylon)
 		{
-			HashSet<Transition> startTransitions = getAllEpsylonTransitions(node);
+			HashSet<string> checkedNodes = new HashSet<string>();
+			HashSet<Transition> startTransitions = getAllEpsylonTransitions(node, checkedNodes);
 			HashSet<Transition> midTransitions = new HashSet<Transition>();
 			foreach (Transition trans in startTransitions)
 			{
 				midTransitions.UnionWith(getAllCharTransitions(trans.to, transition));
 			}
 			HashSet<Transition> endTransitions = new HashSet<Transition>();
+			checkedNodes = new HashSet<string>();
 			foreach (Transition trans in midTransitions)
 			{
-				endTransitions.UnionWith(getAllEpsylonTransitions(trans.to));
+				endTransitions.UnionWith(getAllEpsylonTransitions(trans.to, checkedNodes));
 			}
 			endTransitions.UnionWith(midTransitions); // note: not the startTransitions, because it can't stop without using the char transition.
 			resultTransitions.UnionWith(endTransitions);
@@ -128,7 +130,7 @@ class Automat : RegBase
 		return result;
 	}
 
-	private HashSet<Transition> getAllEpsylonTransitions(string startNode)
+	private HashSet<Transition> getAllEpsylonTransitions(string startNode, HashSet<string> checkedNodes)
 	{
 		HashSet<Transition> allTransitions = new HashSet<Transition>();
 		allTransitions.UnionWith(mTransitions.FindAll(x => (x.from == startNode) && (x.label == Alphabet.Epsylon)));
@@ -137,12 +139,11 @@ class Automat : RegBase
 			HashSet<Transition> extraSet = new HashSet<Transition>();
 			foreach (Transition trans in allTransitions)
 			{
-				HashSet<Transition> tempSet = new HashSet<Transition>(mTransitions.FindAll(x => (x.from == trans.from) && (x.label == Alphabet.Epsylon)));
-				if (tempSet.Count > 0)
+				if (!checkedNodes.Contains(trans.from))
 				{
-					extraSet.UnionWith(tempSet);
+					checkedNodes.Add(trans.from);
+					extraSet.UnionWith(getAllEpsylonTransitions(trans.from, checkedNodes));
 				}
-				//extraSet.UnionWith(getAllEpsylonTransitions(trans.from));
 			}
 			allTransitions.UnionWith(extraSet);
 		}

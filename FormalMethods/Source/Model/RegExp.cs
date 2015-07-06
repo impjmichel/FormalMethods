@@ -58,45 +58,41 @@ class RegExp : RegBase
 						bracketOpen = true;
 					}
 					// open bracket
-					/*
-                     * Dit is niet nodig. hierdoor tekent hij veel onnodige states
-                     * 
-                    tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
-					previousNodeNumber = mCurrentNodeNumber;
-					mCurrentNodeNumber++;
-					tempTransition.to = "" + mCurrentNodeNumber;
-					result.Add(tempTransition);
-                    */
+					//tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
+					//previousNodeNumber = mCurrentNodeNumber;
+					//mCurrentNodeNumber++;
+					//tempTransition.to = "" + mCurrentNodeNumber;
+					//result.Add(tempTransition);
                     //-------------------------------
                                         
                     //dirty but no crash
-                    string sub = null;
-                    if (regEx.Length > 1)
-                    {
-                        sub = regEx.Substring(i + 1);
-                    }
-                    else if(regEx.Length == 1)
-                    {
-                        sub = regEx.Substring(i);
-                    }
-                    else
-                    {
-                        break;
-                    }
+					//string sub = null;
+					//if (regEx.Length > 1)
+					//{
+					//	sub = regEx.Substring(i + 1);
+					//}
+					//else if(regEx.Length == 1)
+					//{
+					//	sub = regEx.Substring(i);
+					//}
+					//else
+					//{
+					//	break;
+					//}
 
-					int endOfBracket;
-					result.AddRange(HandleOpenBracket(sub, previousNodeNumber, out endOfBracket));
+					//int endOfBracket;
+					//result.AddRange(HandleOpenBracket(sub, previousNodeNumber, out endOfBracket));
                     
-					i += endOfBracket;//Found the problem!!! no idea to fix it (when endOfbracket is replaced with just the length of regEx it works fine)
+					//i += endOfBracket;//Found the problem!!! no idea to fix it (when endOfbracket is replaced with just the length of regEx it works fine)
                 
 					//-------------------------------
                     break;
 				case ')':
 					bracketOpen = false;
-					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
-					mCurrentNodeNumber++;
-					tempTransition.to = "" + mCurrentNodeNumber;
-					result.Add(tempTransition);
+					//tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
+					//mCurrentNodeNumber++;
+					//tempTransition.to = "" + mCurrentNodeNumber;
+					//result.Add(tempTransition);
 					if (orEnd)
 					{
 						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);
@@ -139,10 +135,31 @@ class RegExp : RegBase
 					break;
 				case '|':
 					orStarted = true;
-					mOrEnd = mCurrentNodeNumber + 1;
-					tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber, "" + mOrEnd);
+					mOrEnd = mCurrentNodeNumber;
+
+					mCurrentNodeNumber++;
+					tempTransition = new Transition(Alphabet.Epsylon, "" + previousNodeNumber, "" + mOrEnd);
+					List<Transition> preTransitions = result.FindAll(x => x.from == tempTransition.from && x.to == tempTransition.to);
+					if (preTransitions.Count > 0)
+					{
+						foreach (Transition tr in preTransitions)
+						{
+							result.Remove(tr);
+							result.Add(new Transition(tr.label, "" + mOrEnd, "" + mCurrentNodeNumber));
+						}
+					}
+					preTransitions = result.FindAll(x => x.from == tempTransition.to && x.to == tempTransition.from);
+					if (preTransitions.Count > 0)
+					{
+						foreach (Transition tr in preTransitions)
+						{
+							result.Remove(tr);
+							result.Add(new Transition(tr.label, "" + mCurrentNodeNumber, "" + mOrEnd));
+						}
+					}
+					mOrEnd = mCurrentNodeNumber;
 					result.Add(tempTransition);
-					mCurrentNodeNumber = mOrEnd + 1;
+					mCurrentNodeNumber++;
 					break;
 				case '?':
 					tempTransition = new Transition(Alphabet.Epsylon, "" + previousNodeNumber, "" + mCurrentNodeNumber);
@@ -177,12 +194,12 @@ class RegExp : RegBase
 			}
 		}
 
-        int count = 0;
-        foreach(Transition res in result)
-        {
-            count++;
-            Console.WriteLine(count);
-        }
+		//int count = 0;
+		//foreach(Transition res in result)
+		//{
+		//	count++;
+		//	Console.WriteLine(count);
+		//}
 		return result;
 	}
 
@@ -200,12 +217,14 @@ class RegExp : RegBase
 		if (tempLength > regEx.Length)
 		{
 			length = regEx.Length;
+			return regexToTransitions(regEx.Substring(0, regEx.Length), previousNodeNumber);
 		}
 		else
 		{
 			length = tempLength;
+			return regexToTransitions(regEx.Substring(0, tempLength), previousNodeNumber);
 		}
-		return regexToTransitions(regEx.Substring(0, length), previousNodeNumber);
+		
 	}
 
 #endregion

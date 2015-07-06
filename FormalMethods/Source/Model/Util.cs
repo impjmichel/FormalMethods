@@ -18,7 +18,7 @@ public static class Util
 		{
 			foreach (string str in list.Values)
 			{
-				result += str + ",";
+				result += str + ".";
 			}
 			result.Remove(result.Length - 1); // removing the last comma
 			return result;
@@ -35,9 +35,9 @@ public static class Util
 		for (int i = 0; i < set.Count; ++i)
 		{
 			result += set.ElementAt<string>(i);
-			if (i < set.Count -1)
+			if (i < set.Count - 1)
 			{
-				result += ",";
+				result += ".";
 			}
 		}
 		return result;
@@ -48,7 +48,7 @@ public static class Util
 	/// </summary>
 	public static SortedList<string, string> toSortedList(string csv)
 	{
-		string[] result = csv.Split(new char[] { ',', ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+		string[] result = csv.Split(new char[] { ',', ' ', '\t', '\r', '\n', '.' }, StringSplitOptions.RemoveEmptyEntries);
 		SortedList<string, string> list = new SortedList<string, string>();
 		foreach (string str in result)
 		{
@@ -64,7 +64,7 @@ public static class Util
 	/// </summary>
 	public static SortedSet<string> toSet(string csv)
 	{
-		string[] result = csv.Split(new char[] { ',', ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+		string[] result = csv.Split(new char[] { ',', ' ', '\t', '\r', '\n', '.' }, StringSplitOptions.RemoveEmptyEntries);
 		SortedSet<string> set = new SortedSet<string>();
 		set.UnionWith(result);
 		return set;

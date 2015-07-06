@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Models
 {
@@ -16,12 +18,6 @@ class NDFA : Automat
 		DFA result = new DFA(mAlphabet);
 		result.startNodes.Add(Util.toCSV(mStartNodes));
 		HashSet<Transition> newTransitions = new HashSet<Transition>();
-		// failstate transitions:
-		foreach (char transition in mAlphabet.characters)
-		{
-			Transition failure = new Transition(transition, Automat.cFailState, Automat.cFailState);
-			newTransitions.Add(failure);
-		}
 
 		// fill transitions:
 		List<string> todoNodes = new List<string>(); // list of comma seperated values of the node names.
@@ -49,11 +45,26 @@ class NDFA : Automat
 			doneNodes.Add(currentNodes);
 			if (addedNodes.Count > 0)
 			{
-				todoNodes.Add(Util.toCSV(addedNodes));
+				string newNode = Util.toCSV(addedNodes);
+				if (!doneNodes.Contains(newNode))
+					todoNodes.Add(newNode);
 			}
 		}
 		result.transitions.AddRange(newTransitions);
+		// the '+' check:
+		foreach (Transition tr in mTransitions)
+		{
+			if (tr.label != Alphabet.Epsylon)
+			{
+				Transition temp = mTransitions.Find(x => x.label == Alphabet.Epsylon && x.to == tr.from && x.from == tr.to);
+				if (temp != null)
+				{
+					result.transitions.Add(new Transition(tr.label, temp.from, temp.to));
+				}
+			}
+		}
 
+		//-------------------------------------------------------------------
 		// end states:
 		foreach (string end in mEndNodes)
 		{
@@ -66,7 +77,21 @@ class NDFA : Automat
 				}
 			}
 		}
-
+		// add also all states that have epsylon transitions to an endNode:
+		List<Transition> endNodetransitions = mTransitions.FindAll(x => mEndNodes.Contains(x.to) && x.label == Alphabet.Epsylon);
+		foreach (Transition trans in endNodetransitions)
+		{
+			//result.endNodes.Add(trans.from);
+			foreach (string csv in result.nodes)
+			{
+				SortedSet<string> set = Util.toSet(csv);
+				if (set.Contains(trans.from))
+				{
+					result.endNodes.Add(csv);
+				}
+			}
+		}
+		// removing all useless transitions (nodes with no "to" arrows that are not start nodes)
 		HashSet<string> all_TO_nodes = new HashSet<string>();
 		HashSet<string> all_FROM_nodes = new HashSet<string>();
 		foreach (Transition tr in result.transitions)
@@ -89,9 +114,64 @@ class NDFA : Automat
 					result.transitions.RemoveAll(x => x.from == from);
 				}
 			}
-			
+
 		}
-		//if (result.isDFA())
+		//removing every node that isn't part of the nodes list:
+		result.endNodes.IntersectWith(result.nodes);
+		//-------------------------------------------------------------------
+		// failstate transitions:
+		// failstate transitions:
+		foreach (char transition in mAlphabet.characters)
+		{
+			Transition failure = new Transition(transition, Automat.cFailState, Automat.cFailState);
+			newTransitions.Add(failure);
+		}
+		foreach (string node in result.nodes)
+		{
+			foreach (char transition in mAlphabet.characters)
+			{
+				Transition tr = result.transitions.Find(x => x.from == node && x.label == transition);
+				if (tr == null)
+				{
+					result.transitions.Add(new Transition(transition, node, Automat.cFailState));
+				}
+			}
+		}
+		//-------------------------------------------------------------------------------------------------------
+		//cleaning names:
+		Dictionary<string, string> remapper = new Dictionary<string, string>();
+		for (int i = 0; i < result.nodes.Count; ++i)
+		{
+			remapper.Add(result.nodes.ElementAt<string>(i), "" + i);
+		}
+		// start nodes
+		SortedSet<string> renamedStartNodes = new SortedSet<string>();
+		foreach (string str in result.startNodes)
+		{
+			if (remapper.ContainsKey(str))
+				renamedStartNodes.Add(remapper[str]);
+		}
+		result.startNodes.Clear();
+		result.startNodes.UnionWith(renamedStartNodes);
+		// end nodes:
+		SortedSet<string> renamedEndNodes = new SortedSet<string>();
+		foreach (string str in result.endNodes)
+		{
+			if (remapper.ContainsKey(str))
+				renamedEndNodes.Add(remapper[str]);
+		}
+		result.endNodes.Clear();
+		result.endNodes.UnionWith(renamedEndNodes);
+		// transitions:
+		List<Transition> renamedTransitions = new List<Transition>();
+		foreach (Transition tr in result.transitions)
+		{
+			if (remapper.ContainsKey(tr.from) && remapper.ContainsKey(tr.to))
+				renamedTransitions.Add(new Transition(tr.label, remapper[tr.from], remapper[tr.to]));
+		}
+		result.transitions.Clear();
+		result.transitions.AddRange(renamedTransitions);
+			//if (result.isDFA())
 			return result;
 		//else
 		//	return null;
