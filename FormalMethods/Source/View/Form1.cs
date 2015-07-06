@@ -45,6 +45,10 @@ public partial class Form1 : Form
 	private Label label7;
 	private TextBox endsWithINPUT;
 	private TextBox containsINPUT;
+	private Label checkLabel;
+	private Label label9;
+	private TextBox inputCheckINPUT;
+	private Button checkButton;
 
     private int option = -1;
 	
@@ -58,6 +62,15 @@ public partial class Form1 : Form
 	{
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.checkLabel = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.inputCheckINPUT = new System.Windows.Forms.TextBox();
+			this.endsWithButton = new System.Windows.Forms.Button();
+			this.containsButton = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.endsWithINPUT = new System.Windows.Forms.TextBox();
+			this.containsINPUT = new System.Windows.Forms.TextBox();
 			this.startWithButton = new System.Windows.Forms.Button();
 			this.label6 = new System.Windows.Forms.Label();
 			this.startWithINPUT = new System.Windows.Forms.TextBox();
@@ -79,12 +92,7 @@ public partial class Form1 : Form
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.button4 = new System.Windows.Forms.Button();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.containsINPUT = new System.Windows.Forms.TextBox();
-			this.endsWithINPUT = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.containsButton = new System.Windows.Forms.Button();
-			this.endsWithButton = new System.Windows.Forms.Button();
+			this.checkButton = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -106,6 +114,10 @@ public partial class Form1 : Form
 			// 
 			// tabPage1
 			// 
+			this.tabPage1.Controls.Add(this.checkButton);
+			this.tabPage1.Controls.Add(this.checkLabel);
+			this.tabPage1.Controls.Add(this.label9);
+			this.tabPage1.Controls.Add(this.inputCheckINPUT);
 			this.tabPage1.Controls.Add(this.endsWithButton);
 			this.tabPage1.Controls.Add(this.containsButton);
 			this.tabPage1.Controls.Add(this.label8);
@@ -127,6 +139,83 @@ public partial class Form1 : Form
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "RegEx Input";
 			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// checkLabel
+			// 
+			this.checkLabel.AutoSize = true;
+			this.checkLabel.Location = new System.Drawing.Point(644, 83);
+			this.checkLabel.Name = "checkLabel";
+			this.checkLabel.Size = new System.Drawing.Size(10, 13);
+			this.checkLabel.TabIndex = 18;
+			this.checkLabel.Text = " ";
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(644, 18);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(128, 13);
+			this.label9.TabIndex = 17;
+			this.label9.Text = "check the following input:";
+			// 
+			// inputCheckINPUT
+			// 
+			this.inputCheckINPUT.Location = new System.Drawing.Point(644, 37);
+			this.inputCheckINPUT.Name = "inputCheckINPUT";
+			this.inputCheckINPUT.Size = new System.Drawing.Size(142, 20);
+			this.inputCheckINPUT.TabIndex = 16;
+			// 
+			// endsWithButton
+			// 
+			this.endsWithButton.Location = new System.Drawing.Point(386, 298);
+			this.endsWithButton.Name = "endsWithButton";
+			this.endsWithButton.Size = new System.Drawing.Size(105, 23);
+			this.endsWithButton.TabIndex = 15;
+			this.endsWithButton.Text = "create";
+			this.endsWithButton.UseVisualStyleBackColor = true;
+			this.endsWithButton.Click += new System.EventHandler(this.endsWithButton_Click);
+			// 
+			// containsButton
+			// 
+			this.containsButton.Location = new System.Drawing.Point(386, 251);
+			this.containsButton.Name = "containsButton";
+			this.containsButton.Size = new System.Drawing.Size(105, 23);
+			this.containsButton.TabIndex = 14;
+			this.containsButton.Text = "create";
+			this.containsButton.UseVisualStyleBackColor = true;
+			this.containsButton.Click += new System.EventHandler(this.containsButton_Click);
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(10, 278);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(109, 13);
+			this.label8.TabIndex = 13;
+			this.label8.Text = "\"eindigt met\" automat";
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(7, 235);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(85, 13);
+			this.label7.TabIndex = 12;
+			this.label7.Text = "\"bevat\" automat";
+			// 
+			// endsWithINPUT
+			// 
+			this.endsWithINPUT.Location = new System.Drawing.Point(10, 298);
+			this.endsWithINPUT.Name = "endsWithINPUT";
+			this.endsWithINPUT.Size = new System.Drawing.Size(356, 20);
+			this.endsWithINPUT.TabIndex = 11;
+			// 
+			// containsINPUT
+			// 
+			this.containsINPUT.Location = new System.Drawing.Point(10, 251);
+			this.containsINPUT.Name = "containsINPUT";
+			this.containsINPUT.Size = new System.Drawing.Size(356, 20);
+			this.containsINPUT.TabIndex = 10;
 			// 
 			// startWithButton
 			// 
@@ -324,57 +413,15 @@ public partial class Form1 : Form
 			this.dataGridView1.Size = new System.Drawing.Size(294, 317);
 			this.dataGridView1.TabIndex = 0;
 			// 
-			// containsINPUT
+			// checkButton
 			// 
-			this.containsINPUT.Location = new System.Drawing.Point(10, 251);
-			this.containsINPUT.Name = "containsINPUT";
-			this.containsINPUT.Size = new System.Drawing.Size(356, 20);
-			this.containsINPUT.TabIndex = 10;
-			// 
-			// endsWithINPUT
-			// 
-			this.endsWithINPUT.Location = new System.Drawing.Point(10, 298);
-			this.endsWithINPUT.Name = "endsWithINPUT";
-			this.endsWithINPUT.Size = new System.Drawing.Size(356, 20);
-			this.endsWithINPUT.TabIndex = 11;
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(7, 235);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(85, 13);
-			this.label7.TabIndex = 12;
-			this.label7.Text = "\"bevat\" automat";
-			// 
-			// label8
-			// 
-			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(10, 278);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(109, 13);
-			this.label8.TabIndex = 13;
-			this.label8.Text = "\"eindigt met\" automat";
-			// 
-			// containsButton
-			// 
-			this.containsButton.Location = new System.Drawing.Point(386, 251);
-			this.containsButton.Name = "containsButton";
-			this.containsButton.Size = new System.Drawing.Size(105, 23);
-			this.containsButton.TabIndex = 14;
-			this.containsButton.Text = "create";
-			this.containsButton.UseVisualStyleBackColor = true;
-			this.containsButton.Click += new System.EventHandler(this.containsButton_Click);
-			// 
-			// endsWithButton
-			// 
-			this.endsWithButton.Location = new System.Drawing.Point(386, 298);
-			this.endsWithButton.Name = "endsWithButton";
-			this.endsWithButton.Size = new System.Drawing.Size(105, 23);
-			this.endsWithButton.TabIndex = 15;
-			this.endsWithButton.Text = "create";
-			this.endsWithButton.UseVisualStyleBackColor = true;
-			this.endsWithButton.Click += new System.EventHandler(this.endsWithButton_Click);
+			this.checkButton.Location = new System.Drawing.Point(793, 37);
+			this.checkButton.Name = "checkButton";
+			this.checkButton.Size = new System.Drawing.Size(50, 23);
+			this.checkButton.TabIndex = 19;
+			this.checkButton.Text = "check!";
+			this.checkButton.UseVisualStyleBackColor = true;
+			this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
 			// 
 			// Form1
 			// 
@@ -603,6 +650,38 @@ public partial class Form1 : Form
 	private void endsWithButton_Click(object sender, EventArgs e)
 	{
 		staticAutomats(textBox3.Text, endsWithINPUT.Text, 2);
+	}
+
+	private void checkButton_Click(object sender, EventArgs e)
+	{
+		string alphabet = textBox3.Text;
+		string regex = textBox1.Text;
+		string input = inputCheckINPUT.Text;
+		if (checkAlphabet(alphabet))
+		{
+			Alphabet alpha = new Alphabet(alphabet);
+			if (checkString(regex))
+			{
+				RegExp reg = new RegExp(regex, alpha);
+				NDFA tempNDFA = reg.toNDFA();
+				if (tempNDFA.AcceptInput(input))
+				{
+					checkLabel.Text = "INPUT ACCEPTED!";
+				}
+				else
+				{
+					checkLabel.Text = "INPUT NOT ACCEPTED!";
+				}
+			}
+			else
+			{
+				MessageBox.Show("RegEx not accepted, please try again");
+			}
+		}
+		else
+		{
+			MessageBox.Show("Alphabet not accepted, please try again");
+		}
 	}
 }
 }
