@@ -57,42 +57,9 @@ class RegExp : RegBase
 					{
 						bracketOpen = true;
 					}
-					// open bracket
-					//tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
-					//previousNodeNumber = mCurrentNodeNumber;
-					//mCurrentNodeNumber++;
-					//tempTransition.to = "" + mCurrentNodeNumber;
-					//result.Add(tempTransition);
-                    //-------------------------------
-                                        
-                    //dirty but no crash
-					//string sub = null;
-					//if (regEx.Length > 1)
-					//{
-					//	sub = regEx.Substring(i + 1);
-					//}
-					//else if(regEx.Length == 1)
-					//{
-					//	sub = regEx.Substring(i);
-					//}
-					//else
-					//{
-					//	break;
-					//}
-
-					//int endOfBracket;
-					//result.AddRange(HandleOpenBracket(sub, previousNodeNumber, out endOfBracket));
-                    
-					//i += endOfBracket;//Found the problem!!! no idea to fix it (when endOfbracket is replaced with just the length of regEx it works fine)
-                
-					//-------------------------------
                     break;
 				case ')':
 					bracketOpen = false;
-					//tempTransition = new Transition(Alphabet.Epsylon, "" + mCurrentNodeNumber);
-					//mCurrentNodeNumber++;
-					//tempTransition.to = "" + mCurrentNodeNumber;
-					//result.Add(tempTransition);
 					if (orEnd)
 					{
 						tempTransition = new Transition(Alphabet.Epsylon, "" + mOrEnd, "" + mCurrentNodeNumber);

@@ -153,40 +153,4 @@ public static class Util
 		return result;
 	}
 }
-
-
-/* TODOs / ERRORs
- * 
- *	1)	RegExp.cs:
- *			regexToTransitions 
- *			case '('  gaat mis, hier gebeuren rare dingen!
- *			
- *          //------------------------------------------------------------------------------------------------------
- *          //@JM ik heb wat commentaar in de RegExp gezet vanaf lijn 61
- *          //------------------------------------------------------------------------------------------------------
- * 
- *	2)	NDFA.cs:
- *			toDFA
- *				-> Automat.cs
- *						getAllEpsylonTransitions
- *						gaat out of bounds oid, raar shit
- *	
- *	3) Form1.cs:
- *	alleen als je echt, echt, echt niets anders meer te doen hebt
- *		uitbreiden...
- *			misschien iets doen aan naamgeving van die textboxes/buttons... 
- * 
- *	---STILL MISSING---
- *		-	NDFA / DFA  constructors for
- *			-	starts with XYZ
- *			-	contains XYZ
- *			-	ends with XYZ
- *		-	unit tests etc
- *		
- *	---WEIRD SHIT---
- *		-	graphViz will alleen letters, geen tekens :<
- * 
- */
-
-
 }
